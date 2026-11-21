@@ -1,5 +1,5 @@
 (algebra-review)=
-# Algebra review
+# 0.2 Algebra review
 
 Algebra lets us rewrite an expression without changing its value. In calculus,
 the useful form of an expression often depends on the question we are asking.

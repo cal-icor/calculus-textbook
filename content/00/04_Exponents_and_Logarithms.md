@@ -1,5 +1,5 @@
 (exponents-and-logarithms)=
-# Exponents and logarithms
+# 0.4 Exponents and logarithms
 
 ## Exponent rules
 

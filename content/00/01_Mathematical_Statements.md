@@ -1,5 +1,5 @@
 (equality-implication-and-equivalence)=
-# Equality, implication, and equivalence
+# 0.1 Equality, implication, and equivalence
 
 Mathematical symbols describe different relationships. Using the right symbol
 makes a solution easier to follow and prevents logical errors.

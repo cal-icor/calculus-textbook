@@ -1,5 +1,5 @@
-(chapter-0-readiness-check)=
-# Chapter 0 readiness check
+(readiness-check)=
+# 0.5 Readiness check
 
 Try these problems without notes or a calculator. Then use the answer key to
 identify what to review. Showing your reasoning matters more than speed.

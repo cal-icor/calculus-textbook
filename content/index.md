@@ -1,7 +1,7 @@
 # Calculus Course Notes
 
 These notes support a two-course sequence in single-variable calculus. Each
-chapter combines concise explanations, worked examples, practice, and
+numbered section combines concise explanations, worked examples, and
 interactive demonstrations that run directly in the browser.
 
 ## How to use this book
@@ -9,7 +9,7 @@ interactive demonstrations that run directly in the browser.
 1. Read each section and work through the examples with pencil and paper.
 2. Use the interactive activities to test predictions, not just to reveal
    answers.
-3. Complete each chapter's readiness check before moving on.
+3. Use the checks for understanding to decide what to revisit.
 4. Record questions and bring them to class, office hours, or study group.
 
 ```{important}
@@ -25,14 +25,12 @@ page loads.
 
 :::{card} Calculus I
 :link: /precalculus-readiness
-:class: course-tab course-tab-one
 
 Limits, derivatives, applications, and the Fundamental Theorem of Calculus
 :::
 
 :::{card} Calculus II
 :link: /calculus-ii
-:class: course-tab course-tab-two
 
 Integration techniques, sequences and series, parametric and polar calculus
 :::

@@ -1,5 +1,5 @@
 (the-unit-circle)=
-# The unit circle
+# 0.3 The unit circle
 
 The **unit circle** is the circle of radius $1$ centered at the origin:
 

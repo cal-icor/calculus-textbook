@@ -5,7 +5,7 @@ Calculus II continues the single-variable calculus sequence with techniques and
 applications of integration, infinite sequences and series, and calculus in
 parametric and polar form.
 
-## Planned chapters
+## Planned sections
 
 - Integration by parts, partial fractions, and trigonometric techniques
 - Numerical integration and improper integrals
@@ -16,6 +16,6 @@ parametric and polar form.
 - Arc length, surface area, and selected differential equations
 
 ```{note}
-Calculus II chapters will be added as the book is developed. The complete
+Calculus II sections will be added as the book is developed. The complete
 sequence is already outlined in the course calendar.
 ```

@@ -3,7 +3,7 @@ version: 1
 project:
   title: Calculus Course Notes
   description: Interactive notes and activities for Calculus I and Calculus II
-  github: cal-icor/calculus
+  github: cal-icor/calculus-textbook
   license: MIT
   jupyter:
     kernelName: python3
@@ -15,13 +15,29 @@ project:
     - file: content/index.md
     - title: Calculus I
       children:
-        - file: content/Chapter_00/00_Precalculus_Readiness.md
+        - file: content/00/00_Precalculus_Readiness.md
           children:
-            - file: content/Chapter_00/04_Mathematical_Statements.md
-            - file: content/Chapter_00/01_Algebra_Review.md
-            - file: content/Chapter_00/02_Unit_Circle.md
-            - file: content/Chapter_00/03_Exponents_and_Logarithms.md
-            - file: content/Chapter_00/05_Readiness_Check.md
+            - file: content/00/01_Mathematical_Statements.md
+            - file: content/00/02_Algebra_Review.md
+            - file: content/00/03_Unit_Circle.md
+            - file: content/00/04_Exponents_and_Logarithms.md
+            - file: content/00/05_Readiness_Check.md
+        - file: content/01/01_Functions_and_Representations.md
+        - file: content/02/02_Function_Families_and_Inverses.md
+        - file: content/03/03_Limits_at_a_Point.md
+        - file: content/04/04_Limit_Laws_and_Continuity.md
+        - file: content/05/05_Infinite_Behavior_and_the_Derivative.md
+        - file: content/06/06_Differentiation_Rules.md
+        - file: content/07/07_Implicit_and_Inverse_Differentiation.md
+        - file: content/08/08_Related_Rates_and_Extrema.md
+        - file: content/09/09_Mean_Value_and_Indeterminate_Forms.md
+        - file: content/10/10_Shape_and_Optimization.md
+        - file: content/11/11_Antiderivatives.md
+        - file: content/12/12_Definite_Integrals.md
+        - file: content/13/13_Fundamental_Theorem_and_Substitution.md
+        - file: content/14/14_Integration_Checkpoint.md
+        - file: content/15/15_Area_and_Volume.md
+        - file: content/16/16_Calculus_I_Review.md
     - title: Calculus II
       children:
         - file: content/calculus-ii.md
