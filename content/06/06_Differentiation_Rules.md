@@ -80,8 +80,31 @@ $$
 \frac{dy}{dx}=f'(g(x))g'(x).
 $$
 
-Differentiate the outer function while leaving the inner expression in
-place, then multiply by the derivative of the inner function.
+The rule has two factors because a change in $x$ passes through two stages.
+First, $x$ changes the inner quantity $u=g(x)$. Then the change in $u$
+changes the output $y=f(u)$. For small changes,
+
+$$
+\frac{\Delta y}{\Delta x}
+\approx
+\frac{\Delta y}{\Delta u}\frac{\Delta u}{\Delta x}.
+$$
+
+Taking limits gives
+
+$$
+\frac{dy}{dx}=\frac{dy}{du}\frac{du}{dx}.
+$$
+
+This notation is a reminder of the two rates being multiplied, not ordinary
+fraction cancellation.
+
+To apply the rule, name the layers:
+
+1. set the inner expression equal to $u$;
+2. differentiate the outer function with respect to $u$;
+3. replace $u$ with the original inner expression; and
+4. multiply by $du/dx$.
 
 **Example.**
 
@@ -89,6 +112,15 @@ $$
 \frac{d}{dx}\sin(x^2)
 =\cos(x^2)\cdot2x.
 $$
+
+Here $u=x^2$ and $y=\sin u$. The factor $\cos(x^2)$ measures how sine responds
+to a change in its input; the factor $2x$ measures how quickly that input is
+changing.
+
+```{warning}
+Stopping at $\cos(x^2)$ differentiates only the outer layer. The missing
+factor $2x$ is the rate at which the inner input changes.
+```
 
 The explorer below emphasizes expression structure. Choose a form, inspect
 its layers, and reveal the corresponding derivative rule.
@@ -127,6 +159,14 @@ requires the chain rule:
 
 $$
 y'=2x\sin(3x)+3x^2\cos(3x).
+$$
+
+For a deeper composition such as $e^{\sin(x^2)}$, work from the outside
+inward and include one derivative factor for each layer:
+
+$$
+\frac{d}{dx}e^{\sin(x^2)}
+=e^{\sin(x^2)}\cos(x^2)(2x).
 $$
 
 ## 6.6 Checking a derivative

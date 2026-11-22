@@ -88,6 +88,47 @@ The $\varepsilon$-band is a challenge chosen around $L$. The $\delta$-window
 is the response around $a$. Use the figure to see whether the entire graph
 inside the punctured $\delta$-window stays within the band.
 
+The order matters: someone else may choose **any** positive $\varepsilon$,
+including a very small one. After seeing that challenge, we choose a
+$\delta$ that may depend on $\varepsilon$. One fixed window does not have to
+work for every challenge.
+
+The condition $0<|x-a|$ leaves out $x=a$. A limit controls nearby outputs, so
+the value $f(a)$ may be different from $L$ or may not exist. The second
+condition, $|x-a|<\delta$, requires the claim to work for **every** input in
+the punctured window, not just for a few sample points.
+
+### Building a proof
+
+For a simple function, work backward from the desired output inequality.
+To prove
+
+$$
+\lim_{x\to2}(3x-1)=5,
+$$
+
+start with
+
+$$
+|f(x)-5|=|3x-6|=3|x-2|.
+$$
+
+We want this to be less than $\varepsilon$. It is enough to require
+
+$$
+|x-2|<\frac{\varepsilon}{3},
+$$
+
+so choose $\delta=\varepsilon/3$. The formal verification then runs forward:
+if $0<|x-2|<\delta$, then
+
+$$
+|f(x)-5|=3|x-2|<3\delta=\varepsilon.
+$$
+
+The exploratory algebra finds a useful $\delta$; the final implication
+verifies that the choice works.
+
 ```{anywidget} ../_widgets/epsilon_delta.js
 {"function": "linear", "epsilon": 1, "delta": 0.5}
 ```

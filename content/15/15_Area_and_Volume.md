@@ -19,6 +19,26 @@ Think “top minus bottom.” With horizontal slices, the corresponding rule is
 When the curves exchange order, find their intersections and split the
 integral. Geometric area must not become negative.
 
+The subtraction comes from the length of one representative slice. A
+vertical rectangle has height
+
+$$
+\text{upper }y-\text{lower }y
+$$
+
+and thickness $dx$. A horizontal rectangle has length
+
+$$
+\text{right }x-\text{left }x
+$$
+
+and thickness $dy$. Choose the direction that describes the region without
+unnecessary splitting.
+
+```{anywidget} ../_widgets/area_between_curves.js
+{"orientation": "vertical", "slice": 1}
+```
+
 ## 15.2 Cross-sections
 
 If a solid has cross-sectional area $A(x)$ perpendicular to the $x$-axis,
@@ -31,6 +51,16 @@ $$
 The formula does not require circular slices. Squares, triangles, and
 semicircles all fit the same pattern once their area is written in terms of
 $x$.
+
+The setup always begins with one slice:
+
+1. identify its thickness, $dx$ or $dy$;
+2. express its dimensions using the same variable;
+3. write the slice's area formula; and
+4. integrate from the first slice to the last.
+
+The integral is determined by the slice geometry, not by the appearance of
+the finished solid.
 
 ## 15.3 Disks and washers
 
@@ -48,6 +78,11 @@ $$
 A(x)=\pi\bigl(R(x)^2-r(x)^2\bigr).
 $$
 
+Radii are distances from the axis of rotation, so they must be nonnegative.
+For rotation around the horizontal line $y=c$, a radius is typically
+$|f(x)-c|$. Determine which boundary is farther from the axis before naming
+the outer and inner radii.
+
 Use the interactive slice to connect the two-dimensional region, the
 rotated solid, and the integral.
 
@@ -61,6 +96,8 @@ rotated solid, and the integral.
 2. Why is the radius squared in the volume integrand?
 3. Compare the disk areas near the two endpoints. Which slices contribute
    most to the volume?
+4. Switch among disks, washers, and square cross-sections. Which part of the
+   setup changes, and which part remains $\int A(x)\,dx$?
 
 ## 15.4 Choosing a slice direction
 
@@ -74,6 +111,15 @@ Before writing an integral:
 
 A vertical slice means integration with respect to $x$; a horizontal slice
 means integration with respect to $y$.
+
+After choosing the direction, keep every part of the setup consistent. A
+$dx$ integral needs $x$-bounds and dimensions written as functions of $x$.
+A $dy$ integral needs $y$-bounds and dimensions written as functions of $y$.
+
+```{warning}
+Common setup errors are using a diameter as a radius, subtracting radii before
+squaring in a washer, and mixing $x$-bounds with a $dy$ integral.
+```
 
 ## 15.5 Example: rotating a triangular region
 

@@ -41,7 +41,8 @@ says that at least one instantaneous rate matches it.
 
 1. Move the endpoints and compare the secant slope with the parallel tangent.
 2. For the cubic example, can more than one point satisfy the conclusion?
-3. Why must the endpoints remain distinct?
+3. Choose the corner and jump examples. Which hypothesis fails, and why does
+   the theorem no longer guarantee a matching tangent?
 
 ## 9.3 Consequences of the theorem
 

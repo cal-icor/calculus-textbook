@@ -28,6 +28,21 @@ export function riemannSum(family, method, n) {
   return sum;
 }
 
+export function riemannFormula(family, method, n) {
+  const count = Math.max(1, Math.round(Number(n)));
+  if (family === "quadratic") {
+    if (method === "left") return `Σᵢ₌₀^${count - 1} (2i/${count})²(2/${count})`;
+    if (method === "right") return `Σᵢ₌₁^${count} (2i/${count})²(2/${count})`;
+    return `Σᵢ₌₁^${count} ((2i−1)/${count})²(2/${count})`;
+  }
+  if (family === "line") {
+    const offset = method === "left" ? "i−1" : method === "right" ? "i" : "i−1/2";
+    return `Σᵢ₌₁^${count} [−2 + 4(${offset})/${count}](4/${count})`;
+  }
+  const offset = method === "left" ? "i−1" : method === "right" ? "i" : "i−1/2";
+  return `Σᵢ₌₁^${count} sin(2π(${offset})/${count})(2π/${count})`;
+}
+
 function render({ model, el }) {
   return withCleanup(el, (signal) => {
     const style = htmlElement("style", {
@@ -106,7 +121,9 @@ function render({ model, el }) {
       }));
       const sum = riemannSum(familySelect.value, method, n);
       readout.innerHTML =
-        `<strong>Riemann sum:</strong> ${sum.toFixed(5)}<br>` +
+        `<strong>Δx:</strong> ${width.toFixed(5)}<br>` +
+        `<strong>Summation:</strong> ${riemannFormula(familySelect.value, method, n)}<br>` +
+        `<strong>Numerical value:</strong> ${sum.toFixed(5)}<br>` +
         `<strong>Exact integral:</strong> ${family.exact.toFixed(5)}<br>` +
         `<strong>Error:</strong> ${Math.abs(sum - family.exact).toFixed(5)}`;
     };

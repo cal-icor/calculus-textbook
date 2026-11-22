@@ -9,14 +9,35 @@ import {
 } from "../shared.js";
 
 const FAMILIES = {
-  quadratic: { label: "f(x) = x²", fn: (x) => x ** 2, derivative: (x) => 2 * x },
-  cubic: { label: "f(x) = x³ − 3x", fn: (x) => x ** 3 - 3 * x, derivative: (x) => 3 * x ** 2 - 3 },
+  quadratic: { label: "f(x) = x²", fn: (x) => x ** 2, derivative: (x) => 2 * x, valid: true },
+  cubic: {
+    label: "f(x) = x³ − 3x",
+    fn: (x) => x ** 3 - 3 * x,
+    derivative: (x) => 3 * x ** 2 - 3,
+    valid: true,
+  },
+  corner: {
+    label: "Failed hypothesis: f(x) = |x|",
+    fn: Math.abs,
+    derivative: (x) => (x === 0 ? Number.NaN : Math.sign(x)),
+    valid: false,
+    reason: "The function is not differentiable at the corner x = 0.",
+  },
+  jump: {
+    label: "Failed hypothesis: jump at x = 0",
+    fn: (x) => (x < 0 ? x : x + 1),
+    graphFn: (x) => (Math.abs(x) < 0.025 ? Number.NaN : x < 0 ? x : x + 1),
+    derivative: () => 1,
+    valid: false,
+    reason: "The function is not continuous on the closed interval.",
+  },
 };
 
 export function meanValuePoints(family, a, b) {
   if (a === b) return { slope: Number.NaN, points: [] };
   const selected = FAMILIES[family] ?? FAMILIES.quadratic;
   const slope = (selected.fn(b) - selected.fn(a)) / (b - a);
+  if (!selected.valid) return { slope, points: [] };
   if (family === "cubic") {
     const root = Math.sqrt(Math.max(0, (slope + 3) / 3));
     return {
@@ -100,7 +121,7 @@ function render({ model, el }) {
       plot.append(
         svgElement("path", {
           class: "cw-curve",
-          d: pathForFunction(family.fn, sx, sy, bounds.xMin, bounds.xMax),
+          d: pathForFunction(family.graphFn ?? family.fn, sx, sy, bounds.xMin, bounds.xMax),
           "data-dynamic": "true",
         }),
         svgElement("path", {
@@ -124,8 +145,10 @@ function render({ model, el }) {
       }
       readout.innerHTML =
         `<strong>Average slope:</strong> ${result.slope.toFixed(3)}<br>` +
-        `<strong>MVT point${result.points.length === 1 ? "" : "s"}:</strong> ` +
-        `${result.points.map((c) => `c = ${c.toFixed(3)}`).join(", ") || "none in the interval"}`;
+        (family.valid
+          ? `<strong>MVT point${result.points.length === 1 ? "" : "s"}:</strong> ` +
+            `${result.points.map((c) => `c = ${c.toFixed(3)}`).join(", ")}`
+          : `<strong>The theorem does not apply:</strong> ${family.reason}`);
     };
 
     select.addEventListener("change", update, { signal });

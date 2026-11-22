@@ -25,9 +25,23 @@ export const RULE_EXAMPLES = {
   chain: {
     label: "Composition: sin(x²)",
     rule: "Chain rule",
-    structure: ["outer function sin(u)", "inner function u = x²"],
+    structure: [
+      { heading: "Outer function", text: "y = sin(u)", derivative: "dy/du = cos(u)" },
+      { heading: "Inner function", text: "u = x²", derivative: "du/dx = 2x" },
+    ],
     derivative: "cos(x²) · 2x",
     explanation: "Differentiate the outer function at the inner input, then multiply by the inner derivative.",
+  },
+  deepChain: {
+    label: "Three layers: e^(sin(x²))",
+    rule: "Chain rule twice",
+    structure: [
+      { heading: "Outer function", text: "y = eᵘ", derivative: "dy/du = eᵘ" },
+      { heading: "Middle function", text: "u = sin(v)", derivative: "du/dv = cos(v)" },
+      { heading: "Inner function", text: "v = x²", derivative: "dv/dx = 2x" },
+    ],
+    derivative: "e^(sin(x²)) · cos(x²) · 2x",
+    explanation: "Each layer contributes one derivative factor, evaluated at the expression inside it.",
   },
   nested: {
     label: "Nested rules: x² sin(3x)",
@@ -88,11 +102,14 @@ function render({ model, el }) {
         htmlElement("div", { class: "dr-expression", text: example.label.split(": ")[1] }),
       );
       for (const [index, layer] of example.structure.entries()) {
+        const structured = typeof layer === "object";
         map.append(
           htmlElement("div", { class: "dr-arrow", text: index === 0 ? "outer structure" : "then inspect inside" }),
           htmlElement("div", { class: "dr-layer" }, [
-            htmlElement("strong", { text: index === 0 ? example.rule : "Nested part" }),
-            htmlElement("span", { text: layer }),
+            htmlElement("strong", {
+              text: structured ? layer.heading : index === 0 ? example.rule : "Nested part",
+            }),
+            htmlElement("span", { text: structured ? `${layer.text}; ${layer.derivative}` : layer }),
           ]),
         );
       }
@@ -105,7 +122,11 @@ function render({ model, el }) {
       reveal.textContent = revealed ? "Hide derivative" : "Reveal derivative";
       explanation.textContent = revealed
         ? example.explanation
-        : `Start with: ${example.structure[0]}. Which rule matches that structure?`;
+        : `Start with: ${
+          typeof example.structure[0] === "object"
+            ? example.structure[0].text
+            : example.structure[0]
+        }. Which rule matches that structure?`;
     };
 
     select.addEventListener("change", () => {

@@ -1,7 +1,5 @@
 import {
-  drawAxes,
   htmlElement,
-  makePlot,
   pathForFunction,
   svgElement,
   widgetStyles,
@@ -45,10 +43,12 @@ function render({ model, el }) {
       "aria-label": "Accumulation function explorer",
     });
     const layout = htmlElement("div", { class: "cw-layout" });
-    const plot = makePlot(
-      "Integrand and accumulation function",
-      "Shaded signed area ends at a movable boundary; a green curve shows accumulated value.",
-    );
+    const plot = svgElement("svg", {
+      class: "cw-plot",
+      viewBox: "0 0 540 340",
+      role: "img",
+      "aria-label": "Side-by-side integrand and accumulation function graphs",
+    });
     const panel = htmlElement("div", { class: "cw-panel" });
     panel.append(htmlElement("h3", { text: "Move the upper bound" }));
     const familyLabel = htmlElement("label", { text: "Integrand" });
@@ -80,17 +80,29 @@ function render({ model, el }) {
         text: "Blue is f. Green is A(x) = ∫₀ˣ f(t)dt. Shading shows the current signed accumulation.",
       }),
     );
-    const bounds = { xMin: 0, xMax: 6.4, yMin: -2, yMax: 5 };
-    const { sx, sy } = drawAxes(plot, bounds);
+    const sy = (y) => 285 - ((y + 2) / 7) * 240;
+    const sxLeft = (x, max = 6.4) => 35 + (x / max) * 205;
+    const sxRight = (x, max = 6.4) => 300 + (x / max) * 205;
+    plot.append(
+      svgElement("line", { class: "cw-axis", x1: 35, y1: sy(0), x2: 245, y2: sy(0) }),
+      svgElement("line", { class: "cw-axis", x1: 35, y1: 35, x2: 35, y2: 295 }),
+      svgElement("line", { class: "cw-axis", x1: 300, y1: sy(0), x2: 510, y2: sy(0) }),
+      svgElement("line", { class: "cw-axis", x1: 300, y1: 35, x2: 300, y2: 295 }),
+    );
+    const leftTitle = svgElement("text", { class: "cw-label", x: 100, y: 22 });
+    leftTitle.textContent = "integrand f(t)";
+    const rightTitle = svgElement("text", { class: "cw-label", x: 355, y: 22 });
+    rightTitle.textContent = "accumulation A(x)";
+    plot.append(leftTitle, rightTitle);
 
-    const areaPath = (fn, end) => {
-      const parts = [`M ${sx(0)} ${sy(0)}`];
+    const areaPath = (fn, end, max) => {
+      const parts = [`M ${sxLeft(0, max)} ${sy(0)}`];
       const steps = Math.max(2, Math.ceil(end / 0.03));
       for (let index = 0; index <= steps; index += 1) {
         const t = (end * index) / steps;
-        parts.push(`L ${sx(t)} ${sy(fn(t))}`);
+        parts.push(`L ${sxLeft(t, max)} ${sy(fn(t))}`);
       }
-      parts.push(`L ${sx(end)} ${sy(0)} Z`);
+      parts.push(`L ${sxLeft(end, max)} ${sy(0)} Z`);
       return parts.join(" ");
     };
 
@@ -104,20 +116,37 @@ function render({ model, el }) {
       plot.querySelectorAll("[data-dynamic]").forEach((node) => node.remove());
       plot.append(
         svgElement("path", {
-          class: "ac-area", d: areaPath(family.fn, x), "data-dynamic": "true",
+          class: "ac-area", d: areaPath(family.fn, x, family.max), "data-dynamic": "true",
         }),
         svgElement("path", {
           class: "cw-curve",
-          d: pathForFunction(family.fn, sx, sy, 0, family.max),
+          d: pathForFunction(family.fn, (value) => sxLeft(value, family.max), sy, 0, family.max),
           "data-dynamic": "true",
         }),
         svgElement("path", {
           class: "cw-secondary",
-          d: pathForFunction(family.accumulation, sx, sy, 0, family.max),
+          d: pathForFunction(
+            family.accumulation,
+            (value) => sxRight(value, family.max),
+            sy,
+            0,
+            family.max,
+          ),
           "data-dynamic": "true",
         }),
         svgElement("line", {
-          class: "cw-accent", x1: sx(x), y1: sy(0), x2: sx(x), y2: sy(family.fn(x)),
+          class: "cw-accent",
+          x1: sxLeft(x, family.max),
+          y1: sy(0),
+          x2: sxLeft(x, family.max),
+          y2: sy(family.fn(x)),
+          "data-dynamic": "true",
+        }),
+        svgElement("circle", {
+          class: "cw-point",
+          cx: sxRight(x, family.max),
+          cy: sy(value),
+          r: 6,
           "data-dynamic": "true",
         }),
       );

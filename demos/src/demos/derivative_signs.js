@@ -75,10 +75,26 @@ function render({ model, el }) {
       ]),
       xInput,
     );
+    const directionLabel = htmlElement("label", { text: "Your direction prediction" });
+    const directionPrediction = htmlElement("select");
+    for (const value of ["increasing", "decreasing", "stationary"]) {
+      directionPrediction.append(htmlElement("option", { value, text: value }));
+    }
+    directionLabel.append(directionPrediction);
+    const concavityLabel = htmlElement("label", { text: "Your concavity prediction" });
+    const concavityPrediction = htmlElement("select");
+    for (const value of ["concave up", "concave down", "possible inflection"]) {
+      concavityPrediction.append(htmlElement("option", { value, text: value }));
+    }
+    concavityLabel.append(concavityPrediction);
+    const check = htmlElement("button", { type: "button", text: "Check predictions" });
     const readout = htmlElement("div", { class: "cw-readout", "aria-live": "polite" });
     panel.append(
       familyLabel,
       xLabel,
+      directionLabel,
+      concavityLabel,
+      check,
       readout,
       htmlElement("p", {
         class: "cw-help",
@@ -87,6 +103,7 @@ function render({ model, el }) {
     );
     const bounds = { xMin: -3, xMax: 3, yMin: -7, yMax: 7 };
     const { sx, sy } = drawAxes(plot, bounds);
+    let checked = false;
 
     const update = () => {
       const selected = FAMILIES[select.value];
@@ -111,13 +128,24 @@ function render({ model, el }) {
           "data-dynamic": "true",
         }),
       );
-      readout.innerHTML =
-        `<strong>f′(x) = ${behavior.first.toFixed(3)}:</strong> ${behavior.direction}<br>` +
-        `<strong>f″(x) = ${behavior.second.toFixed(3)}:</strong> ${behavior.concavity}`;
+      readout.innerHTML = checked
+        ? `<strong>${directionPrediction.value === behavior.direction ? "Direction correct" : "Recheck direction"}:</strong> ` +
+          `f′(x) = ${behavior.first.toFixed(3)}, so the graph is ${behavior.direction}.<br>` +
+          `<strong>${concavityPrediction.value === behavior.concavity ? "Concavity correct" : "Recheck concavity"}:</strong> ` +
+          `f″(x) = ${behavior.second.toFixed(3)}, so the graph is ${behavior.concavity}.`
+        : "Predict the signs from the graph and tangent, then check.";
     };
 
-    select.addEventListener("change", update, { signal });
-    xInput.addEventListener("input", update, { signal });
+    const revise = () => {
+      checked = false;
+      update();
+    };
+    select.addEventListener("change", revise, { signal });
+    xInput.addEventListener("input", revise, { signal });
+    check.addEventListener("click", () => {
+      checked = true;
+      update();
+    }, { signal });
     layout.append(plot, panel);
     shell.append(layout);
     el.append(style, shell);

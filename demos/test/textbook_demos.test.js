@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { accumulationValue } from "../src/demos/accumulation.js";
 import { antiderivativeValue } from "../src/demos/antiderivative_family.js";
+import { areaSlice } from "../src/demos/area_between_curves.js";
 import { derivativeFor } from "../src/demos/derivative_rules.js";
 import { derivativeBehavior } from "../src/demos/derivative_signs.js";
 import { circlePoint } from "../src/demos/implicit_circle.js";
@@ -9,11 +10,14 @@ import { bandContains } from "../src/demos/epsilon_delta.js";
 import { transformedValue } from "../src/demos/function_transformations.js";
 import { inversePoint } from "../src/demos/inverse_explorer.js";
 import { ladderRates } from "../src/demos/related_rates_ladder.js";
+import { linearApproximation } from "../src/demos/linear_approximation.js";
 import { sampleNear } from "../src/demos/limit_explorer.js";
 import { meanValuePoints } from "../src/demos/mean_value.js";
+import { rectangleModel } from "../src/demos/optimization_rectangle.js";
 import { riemannSum } from "../src/demos/riemann_sums.js";
 import { secantSlope } from "../src/demos/secant_tangent.js";
-import { diskArea } from "../src/demos/volume_slices.js";
+import { substitutionExample } from "../src/demos/substitution.js";
+import { crossSectionArea, diskArea } from "../src/demos/volume_slices.js";
 
 describe("function transformations", () => {
   it("applies shifts and scaling in the documented order", () => {
@@ -121,5 +125,42 @@ describe("accumulation explorer", () => {
 describe("volume slice explorer", () => {
   it("computes disk area from the curve height", () => {
     expect(diskArea("line", 2)).toBeCloseTo(4 * Math.PI);
+  });
+
+  it("compares multiple cross-section formulas", () => {
+    expect(crossSectionArea("square", 3)).toBe(9);
+    expect(crossSectionArea("washer", 2)).toBeCloseTo(8 * Math.PI);
+  });
+});
+
+describe("linear approximation explorer", () => {
+  it("reports actual value, tangent estimate, and signed error", () => {
+    const result = linearApproximation("square_root", 4, 4.5);
+    expect(result.estimate).toBe(2.125);
+    expect(result.error).toBeCloseTo(Math.sqrt(4.5) - 2.125);
+  });
+});
+
+describe("optimization explorer", () => {
+  it("finds the maximum-area rectangle for a fixed perimeter", () => {
+    expect(rectangleModel(40, 6)).toEqual({
+      length: 14,
+      area: 84,
+      maximizingWidth: 10,
+      maximumArea: 100,
+    });
+  });
+});
+
+describe("substitution explorer", () => {
+  it("tracks transformed bounds", () => {
+    expect(substitutionExample("cosine").transformed).toBe("∫₁⁴ cos(u) du");
+  });
+});
+
+describe("area between curves explorer", () => {
+  it("produces equivalent vertical and horizontal slice lengths", () => {
+    expect(areaSlice("vertical", 1).length).toBe(1);
+    expect(areaSlice("horizontal", 1).length).toBe(0.5);
   });
 });

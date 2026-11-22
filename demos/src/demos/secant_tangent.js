@@ -68,11 +68,13 @@ function render({ model, el }) {
     familyLabel.append(select);
     const aControl = control("Base input a", -2, 2, 0.1, model.get("a") ?? 1);
     const hControl = control("Interval h", -2, 2, 0.05, model.get("h") ?? 2);
+    const animate = htmlElement("button", { type: "button", text: "Animate h → 0" });
     const readout = htmlElement("div", { class: "cw-readout", "aria-live": "polite" });
     panel.append(
       familyLabel,
       aControl.label,
       hControl.label,
+      animate,
       readout,
       htmlElement("p", {
         class: "cw-help",
@@ -127,13 +129,44 @@ function render({ model, el }) {
         }));
       }
       readout.innerHTML =
-        `<strong>Secant slope:</strong> ${secant.toFixed(3)}<br>` +
+        `<strong>Difference quotient:</strong> [f(a + h) − f(a)] / h<br>` +
+        `<strong>${h === 0 ? "Limit as h → 0" : `At h = ${h.toFixed(3)}`}:</strong> ${secant.toFixed(3)}<br>` +
         `<strong>Tangent slope:</strong> ${Number.isFinite(tangent) ? tangent.toFixed(3) : "does not exist"}`;
     };
 
     select.addEventListener("change", update, { signal });
     aControl.input.addEventListener("input", update, { signal });
     hControl.input.addEventListener("input", update, { signal });
+    let animation = null;
+    animate.addEventListener("click", () => {
+      if (animation !== null) clearInterval(animation);
+      if (globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+        hControl.input.value = "0";
+        update();
+        return;
+      }
+      let frame = 0;
+      const start = Math.abs(Number(hControl.input.value)) < 0.1
+        ? 2
+        : Number(hControl.input.value);
+      animate.disabled = true;
+      animation = setInterval(() => {
+        frame += 1;
+        const progress = frame / 40;
+        hControl.input.value = String(start * (1 - progress) ** 2);
+        update();
+        if (frame >= 40) {
+          clearInterval(animation);
+          animation = null;
+          hControl.input.value = "0";
+          animate.disabled = false;
+          update();
+        }
+      }, 35);
+    }, { signal });
+    signal.addEventListener("abort", () => {
+      if (animation !== null) clearInterval(animation);
+    }, { once: true });
     layout.append(plot, panel);
     shell.append(layout);
     el.append(style, shell);

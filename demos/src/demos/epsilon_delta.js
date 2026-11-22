@@ -69,11 +69,15 @@ function render({ model, el }) {
     functionLabel.append(select);
     const epsilon = slider("Output tolerance ε", 0.1, 2, 0.1, model.get("epsilon") ?? 1);
     const delta = slider("Input tolerance δ", 0.05, 2, 0.05, model.get("delta") ?? 0.5);
+    const check = htmlElement("button", { type: "button", text: "Check my δ" });
+    const newChallenge = htmlElement("button", { type: "button", text: "New ε challenge" });
     const readout = htmlElement("div", { class: "cw-readout", "aria-live": "polite" });
     panel.append(
       functionLabel,
       epsilon.label,
       delta.label,
+      check,
+      newChallenge,
       readout,
       htmlElement("p", {
         class: "cw-help",
@@ -82,6 +86,9 @@ function render({ model, el }) {
     );
     const bounds = { xMin: -2, xMax: 3, yMin: -3, yMax: 6 };
     const { sx, sy } = drawAxes(plot, bounds);
+    let checked = false;
+    let challengeIndex = 0;
+    const challenges = [1, 0.5, 0.2, 0.1];
 
     const update = () => {
       const selected = FUNCTIONS[select.value];
@@ -108,7 +115,7 @@ function render({ model, el }) {
           y: 40,
           width: sx(selected.a + deltaValue) - sx(selected.a - deltaValue),
           height: 260,
-          fill: passes ? "#08756b" : "#b6414a",
+          fill: checked ? (passes ? "#08756b" : "#b6414a") : "#1557a0",
           opacity: ".14",
           "data-dynamic": "true",
         }),
@@ -125,15 +132,33 @@ function render({ model, el }) {
           "data-dynamic": "true",
         }),
       );
-      readout.innerHTML =
-        `<strong>${passes ? "This δ works" : "This δ is too large"}</strong><br>` +
-        `Target: 0 &lt; |x − ${selected.a}| &lt; ${deltaValue.toFixed(2)} implies ` +
-        `|f(x) − ${selected.limit}| &lt; ${epsilonValue.toFixed(2)}.`;
+      readout.innerHTML = checked
+        ? `<strong>${passes ? "This δ works" : "This δ is too large"}</strong><br>` +
+          `Check: 0 &lt; |x − ${selected.a}| &lt; ${deltaValue.toFixed(2)} ` +
+          `${passes ? "does" : "does not"} force |f(x) − ${selected.limit}| ` +
+          `&lt; ${epsilonValue.toFixed(2)}.`
+        : `<strong>Your challenge:</strong> choose δ so every graph point in the ` +
+          `punctured window lands inside the ε-band, then check your choice.`;
     };
 
-    select.addEventListener("change", update, { signal });
-    epsilon.input.addEventListener("input", update, { signal });
-    delta.input.addEventListener("input", update, { signal });
+    const revise = () => {
+      checked = false;
+      update();
+    };
+    select.addEventListener("change", revise, { signal });
+    epsilon.input.addEventListener("input", revise, { signal });
+    delta.input.addEventListener("input", revise, { signal });
+    check.addEventListener("click", () => {
+      checked = true;
+      update();
+    }, { signal });
+    newChallenge.addEventListener("click", () => {
+      challengeIndex = (challengeIndex + 1) % challenges.length;
+      epsilon.input.value = String(challenges[challengeIndex]);
+      delta.input.value = "0.5";
+      checked = false;
+      update();
+    }, { signal });
     layout.append(plot, panel);
     shell.append(layout);
     el.append(style, shell);

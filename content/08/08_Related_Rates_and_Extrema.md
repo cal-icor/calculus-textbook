@@ -78,6 +78,22 @@ $$
 The approximation is local: it is generally more accurate when $x$ is closer
 to $a$.
 
+The reason is geometric. After zooming in near a differentiable point, the
+graph and its tangent line become difficult to distinguish. The error is the
+vertical gap between the true output $f(x)$ and the tangent-line estimate
+$L(x)$.
+
+```{anywidget} ../_widgets/linear_approximation.js
+{"family": "square_root", "a": 4, "x": 4.5}
+```
+
+### Read the approximation
+
+1. Move $x$ toward $a$. How does the error change?
+2. Compare a concave-up function with a concave-down function. Does the
+   tangent line overestimate or underestimate?
+3. Move the center $a$. Why must it remain in the function's domain?
+
 ## 8.4 Absolute and local extrema
 
 A **local maximum** is at least as large as nearby function values. An
