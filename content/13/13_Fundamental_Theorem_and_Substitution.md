@@ -54,6 +54,23 @@ $h$ gives the **average value** of $f$ on that strip. As $h\to0$, continuity
 forces that average value toward the strip's endpoint height $f(x)$. Thus the
 rate at which area accumulates is the current height of the graph.
 
+**Example.** If
+
+$$
+A(x)=\int_0^x t^2\,dt,
+$$
+
+then Part I predicts $A'(x)=x^2$. Part II gives
+
+$$
+A(x)=\frac{x^3}{3},
+$$
+
+and ordinary differentiation confirms
+$A'(x)=x^2$. The accumulation function and the original integrand are
+different functions, but the integrand is the accumulation function's rate
+of change.
+
 For a variable upper bound $g(x)$, the chain rule gives
 
 $$
@@ -146,6 +163,21 @@ $$
 $$
 
 Do not combine $u$-bounds with an expression still written in $x$.
+
+```{warning}
+A common inconsistent setup is
+
+$$
+\int_1^2 2x\cos(x^2)\,dx
+\ne
+\int_1^2\cos u\,du.
+$$
+
+The integrand has been changed to $u$, but the bounds are still the original
+$x$-values. Either use the transformed bounds
+$\int_1^4\cos u\,du$, or find an antiderivative in $u$, substitute
+$u=x^2$ back, and then use the original bounds.
+```
 
 ```{anywidget} ../_widgets/substitution.js
 {"example": "cosine", "showBounds": true}

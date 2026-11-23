@@ -63,6 +63,18 @@ $$
 (fg)'=f'g+fg'.
 $$
 
+To see why there are two terms, picture a rectangle with side lengths $f$
+and $g$. When $x$ changes, one thin strip comes from the change in $f$ and
+another from the change in $g$:
+
+$$
+\Delta(fg)\approx g\,\Delta f+f\,\Delta g.
+$$
+
+The tiny corner $\Delta f\,\Delta g$ becomes negligible after division by
+$\Delta x$ and taking the limit. This leaves $f'g+fg'$: each term records one
+factor changing while the other supplies the current scale.
+
 For a quotient with $g(x)\ne0$,
 
 $$

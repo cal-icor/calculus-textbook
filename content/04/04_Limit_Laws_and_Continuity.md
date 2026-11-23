@@ -98,16 +98,15 @@ the value $f(a)$ may be different from $L$ or may not exist. The second
 condition, $|x-a|<\delta$, requires the claim to work for **every** input in
 the punctured window, not just for a few sample points.
 
-### Building a proof
+### Worked epsilon-delta proof
 
-For a simple function, work backward from the desired output inequality.
-To prove
+**Claim.** For $f(x)=3x-1$,
 
 $$
 \lim_{x\to2}(3x-1)=5,
 $$
 
-start with
+**Choosing $\delta$.** Work backward from the desired output inequality:
 
 $$
 |f(x)-5|=|3x-6|=3|x-2|.
@@ -119,8 +118,10 @@ $$
 |x-2|<\frac{\varepsilon}{3},
 $$
 
-so choose $\delta=\varepsilon/3$. The formal verification then runs forward:
-if $0<|x-2|<\delta$, then
+so choose $\delta=\varepsilon/3$.
+
+**Verification.** Given any $\varepsilon>0$, choose
+$\delta=\varepsilon/3$. If $0<|x-2|<\delta$, then
 
 $$
 |f(x)-5|=3|x-2|<3\delta=\varepsilon.

@@ -121,7 +121,28 @@ Common setup errors are using a diameter as a radius, subtracting radii before
 squaring in a washer, and mixing $x$-bounds with a $dy$ integral.
 ```
 
-## 15.5 Example: rotating a triangular region
+## 15.5 Worked washer example
+
+Rotate the region between $y=x$ and $y=1$ for $1\le x\le2$ around the
+$x$-axis. A vertical slice creates a washer. Its outer radius is the distance
+from the axis to $y=x$, so $R(x)=x$. Its inner radius is the distance to
+$y=1$, so $r(x)=1$.
+
+$$
+\begin{aligned}
+V
+&=\int_1^2\pi\bigl(R(x)^2-r(x)^2\bigr)\,dx\\
+&=\pi\int_1^2(x^2-1)\,dx\\
+&=\pi\left[\frac{x^3}{3}-x\right]_1^2
+=\frac{4\pi}{3}.
+\end{aligned}
+$$
+
+The inner radius is nonzero because the region does not touch the axis of
+rotation. Notice that the washer area is $\pi(R^2-r^2)$, not
+$\pi(R-r)^2$.
+
+## 15.6 Example: rotating a triangular region
 
 Rotate the region under $y=x$ from $x=0$ to $x=2$ around the $x$-axis.
 Each cross-section is a disk of radius $x$, so
@@ -134,7 +155,7 @@ $$
 
 The units are cubic because cross-sectional area is multiplied by thickness.
 
-## 15.6 What to carry forward
+## 15.7 What to carry forward
 
 Area and volume formulas are not separate facts to memorize. Both come from
 adding thin pieces: height times width for area, and cross-sectional area
